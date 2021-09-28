@@ -1,0 +1,4 @@
+[submodule "acuity-toolkit/bin"]
+	path = acuity-toolkit/bin
+	url = https://gitlab.com/khadas/neural_network_large_file.git
+	branch = aml_npu_convert_tool
