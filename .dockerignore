@@ -1,0 +1,7 @@
+android_sdk/
+docs/
+.git/
+.gitignore
+LICENSE
+linux_sdk/
+toolchains/
