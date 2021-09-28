@@ -2,3 +2,7 @@
 	path = acuity-toolkit/bin
 	url = https://gitlab.com/khadas/neural_network_large_file.git
 	branch = aml_npu_convert_tool
+[submodule "acuity-toolkit/python"]
+	path = acuity-toolkit/python
+	url = https://gitlab.com/khadas/neural_network_large_file.git
+	branch = ksnn_convert
