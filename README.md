@@ -1,3 +1,11 @@
+## Clone
+
+Clone with submodules
+
+```sh
+$ git clone --recursive https://github.com/khadas/aml_npu_sdk.git
+```
+
 ## Use Docker
 
 Please install [Docker](https://docs.docker.com/) on your host PC.
