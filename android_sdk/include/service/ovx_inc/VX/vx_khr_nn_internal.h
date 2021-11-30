@@ -833,6 +833,53 @@ VX_API_ENTRY vx_node VX_API_CALL vxConvolutionReluPoolingAddLayer2(
     vx_tensor                   outputs_conv,
     vx_tensor                   outputs_add);
 
+/*! \brief [Graph] Creates a Convolutional Network Convolution and Activation(Relu) and Pooling and Multiply Layer Node.
+ * \details This function implement Convolutional Network Convolution and Activation(Relu) and Pooling and Multiply layer.
+ *  For fixed-point data types, a fixed point calculation is performed with round and saturate according to the number of accumulator bits. The number of the accumulator bits are implementation defined,
+ * and should be at least 16.\n
+ * round: rounding according the <tt>vx_round_policy_e</tt> enumeration. \n
+ * saturate: A saturation according the <tt>vx_convert_policy_e</tt> enumeration.
+ * The following equation is implemented: \n
+ * \f$ outputs[j,k,i] = saturate(round(\sum_{l} (\sum_{m,n} inputs[j-m,k-n,l] \times weights[m,n,l,i])+biasses[j,k,i])) \f$\n
+ * Where \f$m,n\f$ are indexes on the convolution matrices. \f$ l\f$ is an index on all the convolutions per input.\f$ i\f$ is an index per output.
+ * \f$ j,k \f$ are the inputs/outputs spatial indexes.
+ * Convolution is done on the width and height dimensions of the <tt>\ref vx_tensor</tt>. Therefore, we use here the term x for index along the width dimension and y for index along the height dimension.\n
+ * before the Convolution is done, a padding with zeros of the width and height input dimensions is performed.
+ * Then down scale is done by picking the results according to a skip jump. The skip in the x and y is determined by the output size dimensions.
+ * The relation between input to output is as follows: \n
+ * \f$ width_{output} = round(\frac{(width_{input} + paddingleft_x + paddingright_x - kernel_x - (kernel_x -1) * dilation_x)}{skip_x} + 1) \f$\n
+ * and \n
+ * \f$ height_{output} = round(\frac{(height + paddingtop_y + paddingbottom_y - kernel_y - (kernel_y -1) * dilation_y)}{skip_y} + 1) \f$\n
+ * where \f$width\f$ is the size of the input width dimension. \f$height\f$ is the size of the input height dimension.
+ * \f$width_{output}\f$ is the size of the output width dimension. \f$height_{output}\f$ is the size of the output height dimension.
+ * \f$kernel_x\f$ and \f$kernel_y\f$ are the convolution sizes in width and height dimensions.
+ * skip is calculated by the relation between input and output.
+ * rounding is done according to <tt>\ref vx_convolutional_network_rounding_type_e</tt>.
+ * \param [in] graph The handle to the graph.
+ * \param [in] inputs_conv The input tensor data for convolution. 3 lower dimensions represent a single input, all following dimensions represent number of batches, possibly nested.
+ * \param [in] inputs_mul The input tensor data for mul. 3 lower dimensions represent a single input, all following dimensions represent number of batches, possibly nested.
+ * The dimension order is [width, height, #IFM, #batches]. \n
+ * \param [in] scale A non-negative <tt>\ref VX_TYPE_FLOAT32</tt> multiplied to each product before overflow handling.
+ * \param [in] weights_biases [static] Point to WeightBiasesParameter data, vx_weights_biases_parameter is an opaque reference.
+ * \param [in] convolution_relu_pooling_params [static] Pointer to parameters of type <tt>\ref vx_nn_convolution_relu_pooling_params_t</tt>
+ * \param [in] size_of_convolution_relu_pooling_params [static] Size in bytes of convolution_relu_pooling_params.
+ * \param [out] outputs_conv The convolution output tensor data. Output will have the same number and structure of dimensions as inputs_conv.
+ * \param [out] outputs_mul The final mul output tensor data. Output will have the same number and structure of dimensions as input.
+ * \return <tt> vx_node</tt>.
+ * \returns A node reference <tt>\ref vx_node</tt>. Any possible errors preventing a
+ * successful creation should be checked using <tt>\ref vxGetStatus</tt>.
+ * \ingroup group_cnn
+ */
+VX_API_ENTRY vx_node VX_API_CALL vxConvolutionReluPoolingMultiplyLayer2(
+    vx_graph                    graph,
+    vx_tensor                   inputs_conv,
+    vx_tensor                   inputs_mul,
+    vx_float32                  input_scale,
+    vx_weights_biases_parameter weights_biases,
+    const vx_nn_convolution_relu_pooling_params_t * convolution_relu_pooling_params,
+    vx_size                     size_of_convolution_relu_pooling_params,
+    vx_tensor                   outputs_conv,
+    vx_tensor                   outputs_mul);
 /*! \brief [Graph] Performs LUT on element values in the input tensor data's.
  * \param [in] graph The handle to the graph.
  * \param [in] input input tensor data.

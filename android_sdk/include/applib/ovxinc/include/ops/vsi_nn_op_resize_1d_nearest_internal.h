@@ -21,32 +21,22 @@
 *    DEALINGS IN THE SOFTWARE.
 *
 *****************************************************************************/
-#ifndef _VSI_NN_OP_RESHAPE_H
-#define _VSI_NN_OP_RESHAPE_H
+
+#ifndef _VSI_NN_OP_RESIZE_1D_NEAREST_INTERNAL_H
+#define _VSI_NN_OP_RESIZE_1D_NEAREST_INTERNAL_H
 
 #include "vsi_nn_types.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct _vsi_nn_reshape_lcl_data
+typedef struct _vsi_nn_resize_1d_nearest_internal_param
 {
-    vsi_bool initialized;
-} vsi_nn_reshape_lcl_data;
+    struct _resize_1d_nearest_internal_local_data_t* local;
+    vsi_bool    align_corners;
+    vsi_bool    half_pixel_centers;
+    float        factor;
+} vsi_nn_resize_1d_nearest_internal_param;
 
-typedef struct _vsi_nn_reshape_param
-{
-    const uint32_t * size;
-    uint32_t dim_num;
-
-    /* reshape layer local data structure */
-    vsi_nn_reshape_lcl_data local;
-} vsi_nn_reshape_param;
-
-#ifdef __cplusplus
-}
-#endif
+_compiler_assert(offsetof(vsi_nn_resize_1d_nearest_internal_param, local) == 0, \
+    vsi_nn_resize_1d_nearest_internal_h );
 
 #endif
 

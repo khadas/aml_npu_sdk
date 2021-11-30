@@ -153,7 +153,7 @@ OVXLIB_API vsi_status vsi_nn_QueryTensorAttr
  */
 OVXLIB_API uint8_t * vsi_nn_ConvertTensorToData
     (
-    vsi_nn_graph_t  * graph,
+    const vsi_nn_graph_t  * graph,
     vsi_nn_tensor_t * tensor
     );
 
@@ -315,9 +315,9 @@ OVXLIB_API vsi_nn_tensor_t * vsi_nn_CreateTensorFromData
  */
 OVXLIB_API vsi_status vsi_nn_CopyDataToTensor
     (
-    vsi_nn_graph_t       * graph,
+    const vsi_nn_graph_t * graph,
     vsi_nn_tensor_t      * tensor,
-    uint8_t             * data
+    void                 * data
     );
 
 /**
@@ -330,7 +330,7 @@ OVXLIB_API vsi_status vsi_nn_CopyDataToTensor
  */
 OVXLIB_API vsi_status vsi_nn_FlushHandle
     (
-    vsi_nn_tensor_t      * tensor
+    const vsi_nn_tensor_t * tensor
     );
 
 /**
@@ -360,7 +360,7 @@ OVXLIB_API uint32_t vsi_nn_CopyTensorToBuffer
     (
     vsi_nn_graph_t  * graph,
     vsi_nn_tensor_t * tensor,
-    uint8_t        * buffer
+    void            * buffer
     );
 
 /**
@@ -420,7 +420,7 @@ OVXLIB_API vsi_bool vsi_nn_ReshapeTensor
     vsi_nn_graph_t  * graph,
     vsi_nn_tensor_t * input,
     vsi_nn_tensor_t * output,
-    uint32_t       * shape,
+    const uint32_t  * shape,
     uint32_t         dim_num
     );
 
@@ -432,7 +432,7 @@ OVXLIB_API vsi_bool vsi_nn_ReshapeTensor
  */
 OVXLIB_API uint32_t vsi_nn_GetElementNum
     (
-    vsi_nn_tensor_t * tensor
+    const vsi_nn_tensor_t * tensor
     );
 
 /**
@@ -448,8 +448,8 @@ OVXLIB_API uint32_t vsi_nn_GetElementNum
  */
 OVXLIB_API uint32_t vsi_nn_GetTensorSize
     (
-    uint32_t   * shape,
-    uint32_t     dim_num,
+    const uint32_t * shape,
+    uint32_t dim_num,
     vsi_nn_type_e dtype
     );
 
@@ -535,13 +535,35 @@ OVXLIB_API vsi_status vsi_nn_SwapTensorHandle
     vsi_nn_tensor_t * tensor0,
     vsi_nn_tensor_t * tensor1
     );
-
+	
 OVXLIB_API vsi_status vsi_nn_SwapInputBuffer
     (
 	vsi_nn_tensor_t * tensor,
     void* new_buffer,
 	vsi_nn_graph_t *graph
     );
+
+OVXLIB_API vsi_status vsi_nn_SwapOutputBuffer
+    (
+	vsi_nn_tensor_t * tensor,
+    void* new_buffer,
+	vsi_nn_graph_t *graph
+    );
+
+OVXLIB_API vsi_status vsi_nn_SwitchInputBuffer
+    (
+	vsi_nn_tensor_t * tensor,
+    void* new_buffer,
+	vsi_nn_graph_t *graph
+    );
+
+OVXLIB_API vsi_status vsi_nn_SwitchOutputBuffer
+    (
+	vsi_nn_tensor_t * tensor,
+    void* new_buffer,
+	vsi_nn_graph_t *graph
+    );
+
 OVXLIB_API uint32_t vsi_nn_vxGetTensorElementNum
     (
     vsi_nn_tensor_attr_t *attr
@@ -719,6 +741,13 @@ vsi_nn_tensor_t* vsi_nn_ConstTensorAdd_impl
     );
 #define vsi_nn_ConstTensorAdd(_graph, _output_attr, ...) \
     vsi_nn_ConstTensorAdd_impl(_graph, _output_attr, __VA_ARGS__, END_OF_VARIADIC_ARGUMENTS)
+
+vsi_status vsi_nn_SwapHandle
+    (
+    vsi_nn_tensor_t * tensor,
+    void * new_ptr,
+    void ** old_ptr
+    );
 
 #ifdef __cplusplus
 }

@@ -21,32 +21,24 @@
 *    DEALINGS IN THE SOFTWARE.
 *
 *****************************************************************************/
-#ifndef _VSI_NN_OP_RESHAPE_H
-#define _VSI_NN_OP_RESHAPE_H
+
+#ifndef _VSI_NN_OP_INTERP_H
+#define _VSI_NN_OP_INTERP_H
 
 #include "vsi_nn_types.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct _vsi_nn_reshape_lcl_data
+typedef struct _vsi_nn_interp_param
 {
-    vsi_bool initialized;
-} vsi_nn_reshape_lcl_data;
+    struct _interp_local_data_t* local;
+    int32_t   height;  //height of output
+    int32_t   width;   //width of output
+    int32_t   zoom_factor; // zoom factor
+    int32_t   shrink_factor; // shrink factor
+    int32_t   pad_beg; //padding at begin of input
+    int32_t   pad_end; //padding at end of intput
+} vsi_nn_interp_param;
 
-typedef struct _vsi_nn_reshape_param
-{
-    const uint32_t * size;
-    uint32_t dim_num;
 
-    /* reshape layer local data structure */
-    vsi_nn_reshape_lcl_data local;
-} vsi_nn_reshape_param;
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 

@@ -53,7 +53,8 @@ extern "C"{
 typedef struct _vsi_nn_node_attr_t
 {
     int32_t const_tensor_preload_type;
-    int32_t reserved[7];
+    int32_t enable_op_constraint_check;
+    int32_t reserved[6];
 } vsi_nn_node_attr_t;
 
 /** Node structure */
@@ -163,6 +164,24 @@ OVXLIB_API void vsi_nn_PrintNode
 vsi_status vsi_nn_update_node_attr
     (
     vsi_nn_node_t *node
+    );
+
+/**
+ * Set node inputs and outputs
+ *
+ * @param[in] node Node to set IO
+ * @param[in] inputs Input tensors
+ * @param[in] input_num Input tensors' number
+ * @param[in] outputs Output tensors
+ * @param[in] output_num Output tensors' number
+ */
+vsi_status vsi_nn_SetNodeInputsAndOutputs
+    (
+    vsi_nn_node_t * node,
+    vsi_nn_tensor_t * const inputs[],
+    int input_num,
+    vsi_nn_tensor_t * const outputs[],
+    int output_num
     );
 
 #if defined(__cplusplus)

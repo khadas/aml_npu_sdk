@@ -39,7 +39,7 @@ typedef struct _vsi_nn_tile_param
     /* local data must be the first. */
     vsi_nn_tile_lcl_data_t local;
 
-    int32_t* multiples;
+    const int32_t* multiples;
     uint32_t multiples_num;
 } vsi_nn_tile_param;
 

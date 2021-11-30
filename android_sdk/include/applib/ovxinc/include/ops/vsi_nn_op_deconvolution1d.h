@@ -21,8 +21,8 @@
 *    DEALINGS IN THE SOFTWARE.
 *
 *****************************************************************************/
-#ifndef _VSI_NN_OP_RESHAPE_H
-#define _VSI_NN_OP_RESHAPE_H
+#ifndef _VSI_NN_OP_DECONVOLUTION1D_H
+#define _VSI_NN_OP_DECONVOLUTION1D_H
 
 #include "vsi_nn_types.h"
 
@@ -30,23 +30,28 @@
 extern "C" {
 #endif
 
-typedef struct _vsi_nn_reshape_lcl_data
+typedef struct _vsi_nn_deconvolution1d_lcl_data
 {
-    vsi_bool initialized;
-} vsi_nn_reshape_lcl_data;
+    vsi_nn_tensor_t *reshaped_weight;
+} vsi_nn_deconvolution1d_lcl_data;
 
-typedef struct _vsi_nn_reshape_param
+typedef struct _vsi_nn_deconvolution1d_param
 {
-    const uint32_t * size;
-    uint32_t dim_num;
-
-    /* reshape layer local data structure */
-    vsi_nn_reshape_lcl_data local;
-} vsi_nn_reshape_param;
+    /* local data must be the first. */
+    vsi_nn_deconvolution1d_lcl_data* local;
+    uint32_t     ksize;
+    uint32_t     stride;
+    /* Pad left, right */
+    uint32_t     pad[2];
+    /* Pad type default value shall be AUTO */
+    vsi_nn_pad_e pad_type;
+    uint32_t     weights;
+    uint32_t     group;
+    uint32_t     output_padding;
+} vsi_nn_deconvolution1d_param;
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-

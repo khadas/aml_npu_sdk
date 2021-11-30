@@ -69,11 +69,11 @@ typedef struct _vsi_nn_strided_slice_param
     /* local data must be the first. */
     vsi_nn_strided_slice_lcl_data_t local;
 
-    vx_int32 *begin_dims;
+    const vx_int32 *begin_dims;
     vx_uint32 begin_dims_num;
-    vx_int32 *end_dims;
+    const vx_int32 *end_dims;
     vx_uint32 end_dims_num;
-    vx_int32 *stride_dims;
+    const vx_int32 *stride_dims;
     vx_uint32 stride_dims_num;
     vx_int32 begin_mask;
     vx_int32 end_mask;

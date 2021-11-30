@@ -237,7 +237,22 @@ OVXLIB_API vsi_status vsi_nn_VerifyGraph
  */
 OVXLIB_API vsi_status vsi_nn_RunGraph
     (
-    vsi_nn_graph_t * graph
+    const vsi_nn_graph_t * graph
+    );
+
+/**
+ * Genearate NBG cache
+ * Genearate NBG cache
+ *
+ * @param[in] graph Graph handle
+ * @param[in] nbg buffer pointer
+ * @param[in] nbg buffer size
+ * @return VSI_SUCCESS on success, or appropriate error code otherwise
+ */
+OVXLIB_API vsi_status vsi_nn_GenerateNBG(
+    vsi_nn_graph_t * graph,
+    void * nbg_buffer,
+    size_t * size
     );
 
 /**
@@ -381,7 +396,7 @@ void vsi_nn_DeleteTensor
  */
 OVXLIB_API vsi_nn_tensor_t * vsi_nn_GetTensor
     (
-    vsi_nn_graph_t   * graph,
+    const vsi_nn_graph_t   * graph,
     vsi_nn_tensor_id_t tensor_id
     );
 
@@ -396,7 +411,7 @@ OVXLIB_API vsi_nn_tensor_t * vsi_nn_GetTensor
  */
 OVXLIB_API vsi_nn_node_t * vsi_nn_GetNode
     (
-    vsi_nn_graph_t   * graph,
+    const vsi_nn_graph_t   * graph,
     vsi_nn_node_id_t   id
     );
 
@@ -641,7 +656,7 @@ OVXLIB_API vsi_status vsi_nn_ResetRNNBuffers
  */
 OVXLIB_API vsi_bool vsi_nn_HasRNN
     (
-    vsi_nn_graph_t* graph
+    const vsi_nn_graph_t* graph
     );
 
 /**
@@ -658,6 +673,11 @@ void vsi_nn_RemoveTensor
     );
 
 OVXLIB_API vsi_status vsi_nn_TrySetupCompleteSignalNode
+    (
+    vsi_nn_graph_t* graph
+    );
+
+vsi_status vsi_nn_setup_binary_graph_inputs_outputs
     (
     vsi_nn_graph_t* graph
     );
@@ -682,6 +702,18 @@ OVXLIB_API vsi_status vsi_nn_SetGraphPreloadSize
     vsi_nn_graph_t* graph,
     vsi_nn_graph_attr_preload_type_e attr,
     uint32_t size
+    );
+
+vsi_nn_tensor_id_t vsi_nn_get_tensor_id
+    (
+    vsi_nn_graph_t* graph,
+    const vsi_nn_tensor_t * tensor
+    );
+
+OVXLIB_API vsi_status vsi_nn_SetGraphPriority
+    (
+    vsi_nn_graph_t* graph,
+    uint32_t priority
     );
 
 #ifdef __cplusplus

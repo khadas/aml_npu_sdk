@@ -1305,6 +1305,8 @@ enum vx_memory_type_e {
     VX_MEMORY_TYPE_INTERNAL = VX_ENUM_BASE(VX_ID_VIVANTE, VX_ENUM_MEMORY_TYPE) + 0x1,
 
     VX_MEMORY_TYPE_HOST_UNCACHED = VX_ENUM_BASE(VX_ID_VIVANTE, VX_ENUM_MEMORY_TYPE) + 0x2,
+
+    VX_MEMORY_TYPE_HOST_PHYSICAL = VX_ENUM_BASE(VX_ID_VIVANTE, VX_ENUM_MEMORY_TYPE) + 0x3,
 };
 
 /*! \brief The image reconstruction filters supported by image resampling operations.

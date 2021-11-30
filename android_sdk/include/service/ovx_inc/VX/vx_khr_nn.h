@@ -54,6 +54,8 @@ enum vx_graph_attribute_internal_type_e
     VX_GRAPH_VIP_SRAM_PRE_LOAD                    =  VX_ATTRIBUTE_BASE(VX_ID_VIVANTE, VX_TYPE_GRAPH) + 0x1,
     /*! \brief Queries a graph for its weight data pre-loading size in axi sram (read-write. Use a <tt>\ref vx_uint32</tt> parameter. */
     VX_GRAPH_AXI_SRAM_PRE_LOAD                    =  VX_ATTRIBUTE_BASE(VX_ID_VIVANTE, VX_TYPE_GRAPH) + 0x2,
+    /*! \brief Queries a graph for its running priority (read-write. Use a <tt>\ref vx_uint32</tt> parameter. */
+    VX_GRAPH_PRIORITY_VALUE_VIV                   =  VX_ATTRIBUTE_BASE(VX_ID_VIVANTE, VX_TYPE_GRAPH) + 0x3,
 };
 
 /*! \brief Size Alignment of User Memory

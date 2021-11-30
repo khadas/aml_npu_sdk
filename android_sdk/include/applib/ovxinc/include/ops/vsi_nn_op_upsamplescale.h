@@ -21,32 +21,19 @@
 *    DEALINGS IN THE SOFTWARE.
 *
 *****************************************************************************/
-#ifndef _VSI_NN_OP_RESHAPE_H
-#define _VSI_NN_OP_RESHAPE_H
+
+#ifndef _VSI_NN_OP_UPSAMPLESCALE_H
+#define _VSI_NN_OP_UPSAMPLESCALE_H
 
 #include "vsi_nn_types.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-typedef struct _vsi_nn_reshape_lcl_data
+typedef struct _vsi_nn_upsamplescale_param
 {
-    vsi_bool initialized;
-} vsi_nn_reshape_lcl_data;
-
-typedef struct _vsi_nn_reshape_param
-{
-    const uint32_t * size;
-    uint32_t dim_num;
-
-    /* reshape layer local data structure */
-    vsi_nn_reshape_lcl_data local;
-} vsi_nn_reshape_param;
-
-#ifdef __cplusplus
-}
-#endif
+    struct _upsamplescale_local_data_t* local;
+    // Add parameters here
+    int32_t stride;
+    float scale;
+} vsi_nn_upsamplescale_param;
 
 #endif
 

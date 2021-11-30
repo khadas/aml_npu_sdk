@@ -21,32 +21,33 @@
 *    DEALINGS IN THE SOFTWARE.
 *
 *****************************************************************************/
-#ifndef _VSI_NN_OP_RESHAPE_H
-#define _VSI_NN_OP_RESHAPE_H
+#ifndef _VSI_NN_OP_CLIENT_GROUPNORMALIZE_H
+#define _VSI_NN_OP_CLIENT_GROUPNORMALIZE_H
 
 #include "vsi_nn_types.h"
+#include "vsi_nn_platform.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct _vsi_nn_reshape_lcl_data
+typedef struct _vsi_nn_groupnorm_lcl_data
 {
-    vsi_bool initialized;
-} vsi_nn_reshape_lcl_data;
+    /* handle 3D group norm */
+    vsi_nn_tensor_t *reshaped_input;
+    vsi_nn_tensor_t *reshaped_output;
+} vsi_nn_groupnorm_lcl_data;
 
-typedef struct _vsi_nn_reshape_param
+typedef struct _vsi_nn_groupnormalize_param
 {
-    const uint32_t * size;
-    uint32_t dim_num;
-
-    /* reshape layer local data structure */
-    vsi_nn_reshape_lcl_data local;
-} vsi_nn_reshape_param;
+    /* local data must be the first. */
+    vsi_nn_groupnorm_lcl_data* lcl_data;
+    float eps;
+    int32_t group_num;
+} vsi_nn_groupnormalize_param;
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif
-
