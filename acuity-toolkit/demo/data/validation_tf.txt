@@ -1,1 +1,1 @@
-./space_shuttle_224.jpg, 813
+./space_shuttle_224.jpg

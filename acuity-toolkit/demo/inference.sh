@@ -10,16 +10,17 @@ if [ ! -e "$tensorzone" ]; then
 fi
 
 
-#snapshots inference
+#snapshot inference , if set  action snapshot, will export the result of each layer
 $tensorzone \
     --action inference \
+	--reorder-channel '0 1 2' \
     --source text \
     --source-file ./data/validation_tf.txt \
     --channel-mean-value '128 128 128 128' \
     --model-input ${NAME}.json \
     --model-data ${NAME}.data \
     --dtype quantized \
-#    --reorder-channel '0 1 2' 
+
 #    --dtype quantized
 #    --dtype float
 
