@@ -6,6 +6,13 @@ Clone with submodules
 $ git clone --recursive https://github.com/khadas/aml_npu_sdk.git
 ```
 
+update submodules
+
+```sh
+$ git submodule init
+$ git submodule update
+```
+
 c/c++ convert tool:
 
 ```
