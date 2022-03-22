@@ -1,0 +1,1215 @@
+%YAML 1.2
+---
+# !!!This file disallow TABs!!!
+quantize_parameters:
+    '@attach_input/out0_1:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 0.9765625
+        min_value: -1.0
+        zero_point:
+        -   129
+        scale:
+        -   0.007751225493848324
+        qtype: u8
+    '@MobilenetV1/Predictions/Reshape_4:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 19.3260498046875
+        min_value: -9.214138984680176
+        fl:
+        -   10
+        qtype: i16
+    '@MobilenetV1/Logits/SpatialSqueeze_5:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 19.3260498046875
+        min_value: -9.214138984680176
+        fl:
+        -   10
+        qtype: i16
+    '@MobilenetV1/Logits/Conv2d_1c_1x1/BiasAdd_6:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 19.3260498046875
+        min_value: -9.214138984680176
+        fl:
+        -   10
+        qtype: i16
+    '@MobilenetV1/Logits/AvgPool_1a/AvgPool_7:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 5.1428961753845215
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_13_pointwise/Relu6_8:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_13_pointwise/Conv2D_10:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 19.820117950439453
+        min_value: -23.266441345214844
+        fl:
+        -   10
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_13_depthwise/Relu6_11:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_13_depthwise/depthwise_13:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_12_pointwise/Relu6_14:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_12_pointwise/Conv2D_16:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_12_depthwise/Relu6_17:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_12_depthwise/depthwise_19:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_11_pointwise/Relu6_20:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_11_pointwise/Conv2D_22:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_11_depthwise/Relu6_23:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_11_depthwise/depthwise_25:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_10_pointwise/Relu6_26:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_10_pointwise/Conv2D_28:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_10_depthwise/Relu6_29:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_10_depthwise/depthwise_31:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_9_pointwise/Relu6_32:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_9_pointwise/Conv2D_34:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_9_depthwise/Relu6_35:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_9_depthwise/depthwise_37:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_8_pointwise/Relu6_38:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_8_pointwise/Conv2D_40:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_8_depthwise/Relu6_41:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_8_depthwise/depthwise_43:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_7_pointwise/Relu6_44:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_7_pointwise/Conv2D_46:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_7_depthwise/Relu6_47:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_7_depthwise/depthwise_49:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_6_pointwise/Relu6_50:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_6_pointwise/Conv2D_52:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_6_depthwise/Relu6_53:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_6_depthwise/depthwise_55:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_5_pointwise/Relu6_56:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_5_pointwise/Conv2D_58:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_5_depthwise/Relu6_59:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_5_depthwise/depthwise_61:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_4_pointwise/Relu6_62:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_4_pointwise/Conv2D_64:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_4_depthwise/Relu6_65:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_4_depthwise/depthwise_67:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_3_pointwise/Relu6_68:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_3_pointwise/Conv2D_70:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_3_depthwise/Relu6_71:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_3_depthwise/depthwise_73:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_2_pointwise/Relu6_74:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_2_pointwise/Conv2D_76:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 11.238347053527832
+        min_value: -13.386287689208984
+        fl:
+        -   11
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_2_depthwise/Relu6_77:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_2_depthwise/depthwise_79:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_1_pointwise/Relu6_80:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_1_pointwise/Conv2D_82:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_1_depthwise/Relu6_83:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_1_depthwise/depthwise_85:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 16.00236701965332
+        min_value: -18.211360931396484
+        fl:
+        -   10
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_0/Relu6_86:out0':
+        dtype: asymmetric_affine
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        zero_point:
+        -   0
+        scale:
+        -   0.0235294122248888
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_0/Conv2D_88:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 10.27114200592041
+        min_value: -10.935179710388184
+        fl:
+        -   11
+        qtype: i16
+    '@MobilenetV1/Logits/Conv2d_1c_1x1/BiasAdd_6:weight':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        -   0.8935062289237976
+        min_value:
+        -   -0.3677225708961487
+        fl:
+        -   15
+        qtype: i16
+    '@MobilenetV1/Logits/Conv2d_1c_1x1/BiasAdd_6:bias':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        min_value:
+        fl:
+        -   27
+        qtype: i64
+    '@MobilenetV1/MobilenetV1/Conv2d_13_pointwise/Conv2D_10:weight':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        -   2.8648407459259033
+        min_value:
+        -   -1.706175684928894
+        fl:
+        -   13
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_13_pointwise/Conv2D_10:bias':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        min_value:
+        fl:
+        -   25
+        qtype: i64
+    '@MobilenetV1/MobilenetV1/Conv2d_13_depthwise/depthwise_13:weight':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        -   5.7665252685546875
+        min_value:
+        -   -25.77804946899414
+        fl:
+        -   10
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_13_depthwise/depthwise_13:bias':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        min_value:
+        fl:
+        -   22
+        qtype: i64
+    '@MobilenetV1/MobilenetV1/Conv2d_12_pointwise/Conv2D_16:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   1.0351226329803467
+        min_value:
+        -   -1.0450583696365356
+        zero_point:
+        -   128
+        scale:
+        -   0.008157572709023952
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_12_pointwise/Conv2D_16:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        scale:
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_12_depthwise/depthwise_19:weight':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        -   0.992525577545166
+        min_value:
+        -   -0.9774609208106995
+        fl:
+        -   15
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_12_depthwise/depthwise_19:bias':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        min_value:
+        fl:
+        -   27
+        qtype: i64
+    '@MobilenetV1/MobilenetV1/Conv2d_11_pointwise/Conv2D_22:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   0.5532459616661072
+        min_value:
+        -   -0.8267186880111694
+        zero_point:
+        -   153
+        scale:
+        -   0.00541162583976984
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_11_pointwise/Conv2D_22:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.00012733237235806882
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_11_depthwise/depthwise_25:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   2.926483154296875
+        min_value:
+        -   -2.053238868713379
+        zero_point:
+        -   105
+        scale:
+        -   0.01952832192182541
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_11_depthwise/depthwise_25:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.0004594899364747107
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_10_pointwise/Conv2D_28:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   1.4976965188980103
+        min_value:
+        -   -0.948734700679779
+        zero_point:
+        -   99
+        scale:
+        -   0.009593848139047623
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_10_pointwise/Conv2D_28:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.00022573760361410677
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_10_depthwise/depthwise_31:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   2.9696531295776367
+        min_value:
+        -   -3.3812129497528076
+        zero_point:
+        -   136
+        scale:
+        -   0.024905357509851456
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_10_depthwise/depthwise_31:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.000586008420214057
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_9_pointwise/Conv2D_34:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   1.3025786876678467
+        min_value:
+        -   -0.6915485262870789
+        zero_point:
+        -   88
+        scale:
+        -   0.00782010704278946
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_9_pointwise/Conv2D_34:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.00018400252156425267
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_9_depthwise/depthwise_37:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   3.60735821723938
+        min_value:
+        -   -3.626199960708618
+        zero_point:
+        -   128
+        scale:
+        -   0.028366895392537117
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_9_depthwise/depthwise_37:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.0006674563628621399
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_8_pointwise/Conv2D_40:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   0.6405952572822571
+        min_value:
+        -   -0.6316662430763245
+        zero_point:
+        -   127
+        scale:
+        -   0.0049892608076334
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_8_pointwise/Conv2D_40:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.00011739437468349934
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_8_depthwise/depthwise_43:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   6.9209885597229
+        min_value:
+        -   -4.029915809631348
+        zero_point:
+        -   94
+        scale:
+        -   0.04294472560286522
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_8_depthwise/depthwise_43:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.0010104641551151872
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_7_pointwise/Conv2D_46:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   0.6129449009895325
+        min_value:
+        -   -0.7542074918746948
+        zero_point:
+        -   141
+        scale:
+        -   0.005361382383853197
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_7_pointwise/Conv2D_46:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.0001261501747649163
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_7_depthwise/depthwise_49:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   4.5953593254089355
+        min_value:
+        -   -4.796671390533447
+        zero_point:
+        -   130
+        scale:
+        -   0.03683149442076683
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_7_depthwise/depthwise_49:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.0008666234207339585
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_6_pointwise/Conv2D_52:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   1.3317173719406128
+        min_value:
+        -   -0.9970024228096008
+        zero_point:
+        -   109
+        scale:
+        -   0.009132234379649162
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_6_pointwise/Conv2D_52:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.00021487611229531467
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_6_depthwise/depthwise_55:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   1.8116706609725952
+        min_value:
+        -   -1.64107346534729
+        zero_point:
+        -   121
+        scale:
+        -   0.013540172949433327
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_6_depthwise/depthwise_55:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.00031859229784458876
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_5_pointwise/Conv2D_58:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   0.8630496263504028
+        min_value:
+        -   -0.7641878128051758
+        zero_point:
+        -   120
+        scale:
+        -   0.006381323095411062
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_5_pointwise/Conv2D_58:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.00015014878590591252
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_5_depthwise/depthwise_61:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   5.2018938064575195
+        min_value:
+        -   -5.257229804992676
+        zero_point:
+        -   128
+        scale:
+        -   0.041016172617673874
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_5_depthwise/depthwise_61:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.0009650864521972835
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_4_pointwise/Conv2D_64:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   0.7710946202278137
+        min_value:
+        -   -1.1515474319458008
+        zero_point:
+        -   153
+        scale:
+        -   0.007539772428572178
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_4_pointwise/Conv2D_64:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.00017740641487762332
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_4_depthwise/depthwise_67:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   2.2243587970733643
+        min_value:
+        -   -2.0226328372955322
+        zero_point:
+        -   121
+        scale:
+        -   0.01665486954152584
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_4_depthwise/depthwise_67:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.00039187929360195994
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_3_pointwise/Conv2D_70:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   2.2243094444274902
+        min_value:
+        -   -1.2611063718795776
+        zero_point:
+        -   92
+        scale:
+        -   0.013668297789990902
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_3_pointwise/Conv2D_70:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.0003216070181224495
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_3_depthwise/depthwise_73:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   7.327787399291992
+        min_value:
+        -   -10.869441032409668
+        zero_point:
+        -   152
+        scale:
+        -   0.07136167585849762
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_3_depthwise/depthwise_73:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        -   0
+        scale:
+        -   0.0016790982335805893
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_2_pointwise/Conv2D_76:weight':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        -   2.5385324954986572
+        min_value:
+        -   -1.7617870569229126
+        fl:
+        -   13
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_2_pointwise/Conv2D_76:bias':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        min_value:
+        fl:
+        -   25
+        qtype: i64
+    '@MobilenetV1/MobilenetV1/Conv2d_2_depthwise/depthwise_79:weight':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        -   4.713225364685059
+        min_value:
+        -   -4.5728607177734375
+        zero_point:
+        -   126
+        scale:
+        -   0.03641602396965027
+        qtype: u8
+    '@MobilenetV1/MobilenetV1/Conv2d_2_depthwise/depthwise_79:bias':
+        dtype: asymmetric_affine
+        method: layer
+        max_value:
+        min_value:
+        zero_point:
+        scale:
+        qtype: i32
+    '@MobilenetV1/MobilenetV1/Conv2d_1_pointwise/Conv2D_82:weight':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        -   4.2026495933532715
+        min_value:
+        -   -4.078630447387695
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_1_pointwise/Conv2D_82:bias':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        min_value:
+        fl:
+        -   24
+        qtype: i64
+    '@MobilenetV1/MobilenetV1/Conv2d_1_depthwise/depthwise_85:weight':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        -   3.791745662689209
+        min_value:
+        -   -3.367842435836792
+        fl:
+        -   13
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_1_depthwise/depthwise_85:bias':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        min_value:
+        fl:
+        -   25
+        qtype: i64
+    '@MobilenetV1/MobilenetV1/Conv2d_0/Conv2D_88:weight':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        -   2.0478901863098145
+        min_value:
+        -   -2.83059024810791
+        fl:
+        -   13
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_0/Conv2D_88:bias':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value:
+        min_value:
+        fl:
+        -   28
+        qtype: i64
+    '@MobilenetV1/Logits/AvgPool_1a/AvgPool_7_pre_asymmetric_affineu8_to_dynamic_fixed_pointi16_9:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_13_depthwise/depthwise_13_pre_asymmetric_affineu8_to_dynamic_fixed_pointi16_12:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_12_depthwise/depthwise_19_pre_asymmetric_affineu8_to_dynamic_fixed_pointi16_15:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_1_pointwise/Conv2D_82_pre_asymmetric_affineu8_to_dynamic_fixed_pointi16_18:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_2_pointwise/Conv2D_76_pre_asymmetric_affineu8_to_dynamic_fixed_pointi16_21:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_1_depthwise/depthwise_85_pre_asymmetric_affineu8_to_dynamic_fixed_pointi16_24:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 6.0
+        min_value: 0.0
+        fl:
+        -   12
+        qtype: i16
+    '@MobilenetV1/MobilenetV1/Conv2d_0/Conv2D_88_pre_asymmetric_affineu8_to_dynamic_fixed_pointi16_27:out0':
+        dtype: dynamic_fixed_point
+        method: layer
+        max_value: 0.9765625
+        min_value: -1.0
+        fl:
+        -   15
+        qtype: i16
+customized_quantize_layers:
+    MobilenetV1/Logits/AvgPool_1a/AvgPool_7: dynamic_fixed_point-i16
+    MobilenetV1/Logits/Conv2d_1c_1x1/BiasAdd_6: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_13_depthwise/Relu6_11: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_13_pointwise/Conv2D_10: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_13_depthwise/depthwise_13: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_12_depthwise/depthwise_19: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_12_depthwise/Relu6_17: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_1_pointwise/Conv2D_82: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_1_pointwise/Relu6_80: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_2_pointwise/Conv2D_76: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_1_depthwise/depthwise_85: dynamic_fixed_point-i16
+    MobilenetV1/MobilenetV1/Conv2d_0/Conv2D_88: dynamic_fixed_point-i16

@@ -1,0 +1,1 @@
+./data/color_288.jpg ./data/bg_288.jpg ./data/depth_288_3chanl.jpg

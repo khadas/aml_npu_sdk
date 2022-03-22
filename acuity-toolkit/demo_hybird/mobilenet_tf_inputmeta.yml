@@ -1,0 +1,40 @@
+%YAML 1.2
+---
+# !!!This file disallow TABs!!!
+# "category" allowed values: "image, frequency, undefined"
+# "database" allowed types: "GENERATOR, H5FS, TEXT, LMDB, NPY, SQLITE"
+# "tensor_name" only support in H5FS database
+# "preproc_type" allowed types:"IMAGE_RGB, IMAGE_RGB888_PLANAR, IMAGE_I420, IMAGE_NV12, IMAGE_YUV444, IMAGE_GRAY, IMAGE_BGRA, TENSOR"
+input_meta:
+  databases:
+  - path: dataset_npy.txt
+    type: TEXT
+    ports:
+    - lid: attach_input/out0_1
+      category: image
+      dtype: float32
+      sparse: false
+      tensor_name:
+      layout: nhwc
+      shape:
+      - 1
+      - 224
+      - 224
+      - 3
+      fitting: scale
+      preprocess:
+        reverse_channel: false
+        mean:
+        - 128.0
+        - 128.0
+        - 128.0
+        scale: 0.0078125
+        preproc_node_params:
+          add_preproc_node: false
+          preproc_type: IMAGE_RGB
+          preproc_perm:
+          - 0
+          - 1
+          - 2
+          - 3
+      redirect_to_output: false

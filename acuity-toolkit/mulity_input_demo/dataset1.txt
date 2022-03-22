@@ -1,0 +1,1 @@
+./data/color_288.jpg
