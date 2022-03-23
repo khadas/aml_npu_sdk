@@ -26,14 +26,19 @@ python convert tool:
 
 ```
 $ cd acuity-toolkit/python
-$ ./convert --model-name resnet18 --platform pytorch \
---model /home/yan/yan/Yan/models-zoo/pytorch/resnet18/resnet18.pt \
---input-size-list '3,224,224' \
---mean-values '103.94,116.78,123.68,58.82' \
+$ ./convert \
+--model-name inception \
+--platform tensorflow \
+--model /path/to/inception_v3.pb \
+--input-size-list '299,299,3' \
+--inputs input \
+--outputs InceptionV3/Predictions/Reshape_1 \
+--mean-values '128 128 128 0.0078125' \
 --quantized-dtype asymmetric_affine \
+--source-files ./data/dataset/dataset0.txt \
 --kboard VIM3 --print-level 1
 ```
 
-library and nb file directoty: `outputs/resnet18`
+library and nb file directoty: `outputs/inception`
 
 
