@@ -32,8 +32,8 @@ extern "C" {
 
 typedef struct _vsi_nn_scatter_nd_param
 {
-    uint32_t     dim_num;
-    uint32_t*    shape;
+    uint32_t dim_num;
+    const uint32_t* shape;
 } vsi_nn_scatter_nd_param;
 
 #ifdef __cplusplus
