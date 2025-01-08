@@ -1,0 +1,4 @@
+#define DEF_OP( op )    vsi_nn_RegisterClient( \
+        VSI_NN_CLIENT_OP_##op, vsi_nn_client_##op )
+#DEF_OPS#
+#undef DEF_OP

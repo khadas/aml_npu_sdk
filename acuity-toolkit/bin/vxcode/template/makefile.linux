@@ -1,0 +1,127 @@
+ifeq (1,$(USE_IDE_LIB)) #idelib
+CC=$(CROSS_COMPILE)gcc
+CXX=$(CROSS_COMPILE)g++
+DEBUG=0
+#VIVANTE_SDK_DIR=../VeriSilicon/VivanteIDE5.4.0/cmdtools/vsimulator
+INCLUDES=-I. -I$(VIVANTE_SDK_DIR)/include/ \
+ -I$(VIVANTE_SDK_DIR)/include/CL \
+ -I$(VIVANTE_SDK_DIR)/include/VX \
+ -I$(VIVANTE_SDK_DIR)/include/ovxlib \
+ -I$(VIVANTE_SDK_DIR)/include/jpeg
+CFLAGS=-Wall -std=c++0x $(INCLUDES) -D__linux__ -DLINUX
+ifeq (1,$(DEBUG))
+CFLAGS+=-g
+LFLAGS+=-g
+else
+CFLAGS+=-O3
+LFLAGS+=-O3
+endif
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy -lArchModelSw -lNNArchPerf
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib/vsim \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib/x64_linux \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib/x64_linux/vsim \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib/x64_linux/vsim \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy
+LIBS+= -L$(VIVANTE_SDK_DIR)/../common/lib/ \
+ -lvdtproxy
+File = $(VIVANTE_SDK_DIR)/lib/libjpeg.a
+File2 = $(VIVANTE_SDK_DIR)/lib/x64_linux/libjpeg.a
+File3 = $(VIVANTE_SDK_DIR)/../common/lib/libjpeg.a
+ifeq ($(File),$(wildcard $(File)))
+LIBS+= $(File)
+else ifeq ($(File2),$(wildcard $(File2)))
+LIBS+= $(File2)
+else
+LIBS+= $(File3)
+endif
+SRCS=${wildcard *.c}
+SRCS+=${wildcard *.cpp}
+BIN=#NETWORK_NAME_LOWER#
+OBJS=$(addsuffix .o, $(basename $(SRCS)))
+
+.SUFFIXES: .cpp .c
+
+.cpp.o:
+	$(CC) $(CFLAGS) -c $<
+
+.cpp:
+	$(CXX) $(CFLAGS) $< -o $@ -lm
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+
+.c:
+	$(CC) $(CFLAGS) $< -o $@ -lm
+
+all: $(BIN)
+
+$(BIN): $(OBJS)
+	$(CC) $(CFLAGS) $(LFLAGS) $(EXTRALFLAGS) $(OBJS) $(LIBS) -o $@
+
+clean:
+	rm -rf *.o
+	rm -rf $(BIN)
+	rm -rf *~
+
+##############################################################################
+# Acuitylib. Supply necessary libraries.
+else
+include $(AQROOT)/makefile.linux.def
+INCLUDE += -I$(VIVANTE_SDK_INC) -I$(VIVANTE_SDK_INC)/HAL -I$(AQROOT)/sdk/inc  -I./ -I$(OVXLIB_DIR)/include/utils -I$(OVXLIB_DIR)/include/client  -I$(OVXLIB_DIR)/include/ops -I$(OVXLIB_DIR)/include -I$(OVXLIB_DIR)/third-party/jpeg-9b
+CFLAGS += $(INCLUDE)
+ifeq ($(gcdSTATIC_LINK), 1)
+LIBS += $(OVXLIB_DIR)/lib/libovxlib.a
+LIBS += $(VIVANTE_SDK_LIB)/libOpenVXU.a
+LIBS += $(VIVANTE_SDK_LIB)/libOpenVXC.a
+LIBS += $(VIVANTE_SDK_LIB)/libOpenVX.a
+LIBS += $(VIVANTE_SDK_LIB)/libCLC.a
+LIBS += $(VIVANTE_SDK_LIB)/libLLVM_viv.a
+LIBS += $(VIVANTE_SDK_LIB)/libclCompiler.a
+LIBS += $(VIVANTE_SDK_LIB)/libclPreprocessor.a
+LIBS += $(VIVANTE_SDK_LIB)/libclCommon.a
+LIBS += $(VIVANTE_SDK_LIB)/libLLVM_viv.a
+LIBS += $(VIVANTE_SDK_LIB)/libVSC.a
+LIBS += $(VIVANTE_SDK_LIB)/libhalarchuser.a
+LIBS += $(VIVANTE_SDK_LIB)/libhalosuser.a
+LIBS += $(VIVANTE_SDK_LIB)/libGAL.a
+LIBS += $(VIVANTE_SDK_LIB)/libhalarchuser.a
+LIBS += $(VIVANTE_SDK_LIB)/libGAL.a
+LIBS +=  $(LIB_DIR)/libm.a
+LIBS +=  $(LIB_DIR)/libpthread.a
+LIBS +=  $(LIB_DIR)/libc.a
+LIBS +=  $(LIB_DIR)/libdl.a
+LIBS +=  $(LIB_DIR)/librt.a
+LIBS +=  $(LIB_DIR)/libstdc++.a
+LIBS += $(OVXLIB_DIR)/lib/libjpeg.a
+else
+ifeq ($(USE_VXC_BINARY)$(USE_VSC_LITE),11)
+LIBS += -L$(VIVANTE_SDK_LIB) -l OpenVX -l VSC_Lite
+else
+LIBS += -L$(VIVANTE_SDK_LIB) -l OpenVX -l OpenVXU -l VSC -lGAL
+endif
+LIBS += $(OVXLIB_DIR)/lib/libjpeg.a
+LIBS += -L$(OVXLIB_DIR)/lib -l ovxlib
+LIBS += -L$(LIB_DIR) -lm
+endif
+
+#############################################################################
+# Macros.
+PROGRAM = 1
+TARGET_NAME = #NETWORK_NAME_LOWER#
+CUR_SOURCE = ${wildcard *.c}
+#############################################################################
+# Objects.
+OBJECTS =  ${patsubst %.c, $(OBJ_DIR)/%.o, $(CUR_SOURCE)}
+
+# installation directory
+INSTALL_DIR := ./
+
+################################################################################
+# Include the common makefile.
+
+include $(AQROOT)/common.target
+endif

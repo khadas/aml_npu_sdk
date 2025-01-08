@@ -1,0 +1,55 @@
+include $(AQROOT)/makefile.linux.def
+
+INCLUDE += -I$(VIVANTE_SDK_INC) -I$(VIVANTE_SDK_INC)/HAL -I$(AQROOT)/sdk/inc  -I./
+
+CFLAGS += $(INCLUDE)
+
+################################################################################
+# Supply necessary libraries.
+ifeq ($(gcdSTATIC_LINK), 1)
+LIBS += $(VIVANTE_SDK_LIB)/libOpenVXU.a
+LIBS += $(VIVANTE_SDK_LIB)/libOpenVXC.a
+LIBS += $(VIVANTE_SDK_LIB)/libOpenVX.a
+LIBS += $(VIVANTE_SDK_LIB)/libCLC.a
+LIBS += $(VIVANTE_SDK_LIB)/libLLVM_viv.a
+LIBS += $(VIVANTE_SDK_LIB)/libclCompiler.a
+LIBS += $(VIVANTE_SDK_LIB)/libclPreprocessor.a
+LIBS += $(VIVANTE_SDK_LIB)/libclCommon.a
+LIBS += $(VIVANTE_SDK_LIB)/libLLVM_viv.a
+LIBS += $(VIVANTE_SDK_LIB)/libVSC.a
+LIBS += $(VIVANTE_SDK_LIB)/libhalarchuser.a
+LIBS += $(VIVANTE_SDK_LIB)/libhalosuser.a
+LIBS += $(VIVANTE_SDK_LIB)/libGAL.a
+LIBS += $(VIVANTE_SDK_LIB)/libhalarchuser.a
+LIBS += $(VIVANTE_SDK_LIB)/libGAL.a
+LIBS +=  $(LIB_DIR)/libm.a
+LIBS +=  $(LIB_DIR)/libpthread.a
+LIBS +=  $(LIB_DIR)/libc.a
+LIBS +=  $(LIB_DIR)/libdl.a
+LIBS +=  $(LIB_DIR)/librt.a
+LIBS +=  $(LIB_DIR)/libstdc++.a
+else
+LIBS += -L$(VIVANTE_SDK_LIB) -l OpenVX
+ ifdef $(LIB_DIR)
+   LIBS += -L$(LIB_DIR) -lm
+ else
+   LIBS +=  -lm
+ endif
+endif
+
+#############################################################################
+# Macros.
+PROGRAM = 1
+TARGET_NAME = #NETWORK_NAME_LOWER#
+CUR_SOURCE = ${wildcard *.c}
+#############################################################################
+# Objects.
+OBJECTS =  ${patsubst %.c, $(OBJ_DIR)/%.o, $(CUR_SOURCE)}
+
+# installation directory
+INSTALL_DIR := ./
+
+################################################################################
+# Include the common makefile.
+
+include $(AQROOT)/common.target

@@ -1,0 +1,505 @@
+define T_Float                {"tensor(float)", "tensor(float16)", "tensor(double)"}
+define T_All                  {"tensor(int16)", "tensor(float)", "tensor(complex128)", "tensor(int64)", "tensor(complex64)", "tensor(int8)", "tensor(uint64)", "tensor(uint16)", "tensor(double)", "tensor(float16)", "tensor(string)", "tensor(uint8)", "tensor(uint32)", "tensor(bool)", "tensor(int32)"}
+define T_NumAll               {"tensor(int16)", "tensor(float)", "tensor(int64)", "tensor(int8)", "tensor(uint64)", "tensor(uint16)", "tensor(double)", "tensor(float16)", "tensor(uint8)", "tensor(uint32)", "tensor(int32)"}
+define T_NumNoQuant           {"tensor(float)", "tensor(int64)", "tensor(uint64)", "tensor(double)", "tensor(float16)", "tensor(uint32)", "tensor(int32)"}
+define T_NumNoComplex         {"tensor(int16)", "tensor(float)", "tensor(uint8)", "tensor(int64)", "tensor(int8)", "tensor(uint64)", "tensor(uint16)", "tensor(double)", "tensor(float16)", "tensor(uint32)", "tensor(bool)", "tensor(int32)","tensor(string)"}
+define T_NumNoComplexNoString {"tensor(int16)", "tensor(float)", "tensor(uint8)", "tensor(int64)", "tensor(int8)", "tensor(uint64)", "tensor(uint16)", "tensor(double)", "tensor(float16)", "tensor(uint32)", "tensor(bool)", "tensor(int32)"}
+define T_Seq                  {"seq(tensor(float16))", "seq(tensor(int8))", "seq(tensor(float))", "seq(tensor(int64))", "seq(tensor(uint16))", "seq(tensor(string))", "seq(tensor(complex128))", "seq(tensor(uint64))", "seq(tensor(uint8))", "seq(tensor(int32))", "seq(tensor(double))", "seq(tensor(complex64))", "seq(tensor(bool))", "seq(tensor(uint32))", "seq(tensor(int16))"}
+define T_Int8                 {"tensor(int8)", "tensor(uint8)"}
+define T_UI                   {"tensor(uint8)", "tensor(uint32)", "tensor(uint16)", "tensor(uint64)"}
+define T_Bool                 {"tensor(bool)"}
+define In0_Tensor             <T_Float, x, single, "T", "Input Tensor">
+define Out0_Tensor            <T_Float, y, single, "T", "Output Tensor">
+define TENSOR_PROTO_FLOAT     1
+define TENSOR_PROTO_INT8      3
+define TENSOR_PROTO_INT64     7
+define TENSOR_PROTO_BOOL      9
+define INT_MAX                65535
+
+#Logic Check All is true
+def All
+{
+    <T_Bool, x, single, "T", "Input Bool Tensor">
+    bool_to_int = Cast["to":TENSOR_PROTO_INT8](x)
+    i = ReduceMin["keepdims":0](bool_to_int)
+    y = Cast["to":TENSOR_PROTO_BOOL](i)
+    <T_Bool, y, single, "T", "Single Bool Tensor">
+};
+
+#Rank
+def Rank
+{
+    <T_NumAll, x, single, "T", "Input Tensor">
+    rank = SequenceLength(SplitToSequence(Shape(x)))
+    <{"tensor(int64)"}, rank, single, "I64", "Rank Tensor">
+};
+
+# Avg ROI Pool 2D
+def GlobalAvgRoiPool2D
+{
+    (graph({
+            input_tensor(out_index, l_cond, in_data)
+            input_attribute()
+            roi_window = SequenceAt(roi_sequence, out_index)
+            start_h, end_h, start_w, end_w = Split["axis":0, "split":4 ](roi_window)
+            start_index = Concat["axis":0](0, 0, start_h, start_w)
+            end_index = Concat["axis":0](INT_MAX, INT_MAX, end_h, end_w)
+            roi_tensor = Slice(in_data, starts=start_index, ends=end_index)
+            pool_res = ReduceMean["keepdims":1, "axes":[1,2]](roi_tensor)
+            out_tensor(l_cond, pool_res)
+        }), global_pool_on_roi, false, "The cood generate branch")
+    <T_Float, x, single, "T", "Input Tensor">
+    <{"tensor(int64)"}, roi_count, single, "T", "ROI Count">
+    <{"tensor(int64)"}, roi, single, "T", "ROI To Size">
+    roi_sequence = SplitToSequence["keepdims":0](roi)
+    pool_results = Loop["body": global_pool_on_roi](roi_count, true, x)
+    <T_Float, pool_results, single, "T", "Input Tensor">
+};
+
+# Generate ROI
+def AdaptiveROIGenerate
+{
+    (graph({
+            input_tensor(out_index, cond, orig_size, out_size)
+            input_attribute()
+            out_i_f = Cast["to":TENSOR_PROTO_FLOAT](out_index)
+            orig_s_f = Cast["to":TENSOR_PROTO_FLOAT](orig_size)
+            out_s_f = Cast["to":TENSOR_PROTO_FLOAT](out_size)
+            start_index = Floor(Div(Mul(out_i_f, out_size), orig_s_f))
+            start_index_i = Cast["to":TENSOR_PROTO_INT64](start_index)
+            end_index = Ceil(Div(Mul(Add(out_i_f, 1.0), out_s_f), orig_s_f))
+            end_index_i = Cast["to":TENSOR_PROTO_INT64](end_index)
+            coord = Concat["axis":0](start_index_i, end_index_i)
+            out_tensor(cond, orig_size, out_size, out_s_f)
+        }), coord_gen, false, "The cood generate branch")
+    (graph({
+            input_tensor(roi_index, cond, r_h, r_w)
+            input_attribute()
+            stride = Mul(r_h, r_w)
+            h_index = Cast["to": TENSOR_PROTO_INT64](Floor(Div(roi_index, stride)))
+            w_index = Mod(roi_index, stride)
+            h_c = Slice(coord_h, starts=h_index, ends=Add(h_index, 1))
+            w_c = Slice(coord_w, starts=w_index, ends=Add(w_index, 1))
+            roi = Concat["axis":0](h_c, w_c)
+            out_tensor(cond, r_h, r_w, roi)
+        }), roi_gen, false, "The ROI generate")
+    <T_Float, orig_h, single, "T", "Orig Height">
+    <T_Float, orig_w, single, "T", "Orig Width">
+    <T_Float, res_h, single, "T", "New Height">
+    <T_Float, res_w, single, "T", "New Width">
+    nu1, nu2, coord_h = Loop["body":coord_gen](res_h, true, orig_h, res_h)
+    nu3, nu4, coord_w = Loop["body":coord_gen](res_w, true, orig_w, res_w)
+    roi_size = Mul(res_h, res_w)
+    roi = Loop["body": roi_gen](roi_size, true, res_h, res_w)
+    # Maybe need reorder the layout
+    <{"tensor(int64)"}, roi_size, single, "T", "Output Roi Size">
+    <{"tensor(int64)"}, roi, single, "T", "Output Roi">
+};
+
+def AdaptiveBranch
+{
+    (graph({
+            input_tensor()
+            input_attribute()
+            by_pass = Identity(x)
+            out_tensor(by_pass)
+        }), same_shape_branch, false, "The same shape branch")
+    (graph({
+            input_tensor()
+            input_attribute()
+            # First Generate ROI
+            roi_size, roi = AdaptiveROIGenerate(input_height, input_width, output_height, output_width)
+            # Do GlobalAvgPool On All ROI
+            pool_result_flatten = GlobalAvgRoiPool2D(x, roi_size, roi)
+            # Reshape to Expect Output Shape
+            # pool_result_flatten in [n_roi, batch, channel, 1, 1] shape
+            t = Transpose["perm": [1, 2, 3, 4, 0]](pool_result_flatten)
+            new_shape = Concat["axis":0](batch, channel, output_height, output_width)
+            pooled_value = Reshape(t, new_shape)
+            out_tensor(pooled_value)
+        }), adaptive_branch, false, "The training branch")
+    <T_Float, x, single, "T", "Input Tensor">
+    <{"tensor(int64)"}, output_size, single, "T", "Adaptive To Size">
+    batch, channel, input_height, input_width = Split["axis":0, "split":4 ](Shape(x))
+    output_height = SequenceAt(output_size, 0)
+    output_width = SequenceAt(output_size, 1)
+    is_same = And(Equal(input_height, output_height), Equal(input_width, output_width))
+    pool_res = If["else_branch": same_shape_branch, "then_branch": adaptive_branch](is_same)
+    <T_Float, pool_res, single, "T", "Output Tensor">
+};
+
+# Adaptive AvgPool 2D
+def AdaptiveAvgPool2D
+{
+    (graph({
+            input_tensor()
+            input_attribute()
+            global_avg_pool = GlobalAveragePool(x)
+            out_tensor(global_avg_pool)
+        }), global_pool_branch, false, "The same shape branch")
+    (graph({
+            input_tensor()
+            input_attribute()
+            pooled_value = AdaptiveBranch(x, output_size)
+            out_tensor(pooled_value)
+        }), do_adaptive_branch, false, "The training branch")
+    <T_Float, x, single, "T", "Input Tensor">
+    <{"tensor(int64)"}, output_size, single, "T", "Adaptive To Size">
+    output_height = SequenceAt(output_size, 0)
+    output_width = SequenceAt(output_size, 1)
+    is_global_pool = And(Equal(1, output_height), Equal(1, output_width))
+    adaptive_result = If["else_branch": global_pool_branch, "then_branch": do_adaptive_branch](is_global_pool)
+    <T_Float, adaptive_result, single, "T", "Output Tensor">
+};
+
+#Randomized leaky ReLU.
+def RRelu
+{
+    (float(0.125), lower, true, "Lower value")
+    (float(0.33333), upper, true, "Upper value")
+    <T_Float, x, single, "T", "Input Tensor">
+    gt0 = Clip(x, min=0)
+    lt0 = Clip(x, max=0)
+    random = RandomUniformLike["hight":upper, "low":lower, "dtype":1](x)
+    lt0_leak = Mul(lt0, random)
+    y = Add(gt0, lt0_leak)
+    <T_Float, y, single, "T", "Output Tensor">
+};
+
+#Greater Equal
+def GreaterEqual
+{
+    <T_NumAll, x1, single, "T", "Input Tensor">
+    <T_NumAll, x2, single, "T", "Input Tensor">
+    y = Or(Greater(x1, x2), Equal(x1,x2))
+    <T_Bool, y, single, "T", "Output Tensor">
+};
+
+#Less Equal
+def LessEqual
+{
+   <T_NumAll, x1, single, "T", "Input Tensor">
+   <T_NumAll, x2, single, "T", "Input Tensor">
+   y = Or(Less(x1, x2), Equal(x1,x2))
+   <T_Bool, y, single, "T", "Output Tensor">
+};
+
+#Upsample_Torch
+def UpsampleTorch
+{
+    (string("nearest"), mode, true, "UpsampleMode")
+    <T_NumAll, x, single, "T", "Input Tensor">
+    <T_NumAll, output_size, single, "T", "Input Tensor">
+    batch, channel, input_height, input_width = Split["axis":0, "split":4 ](Shape(x))
+    output_height = SequenceAt(output_size, 0)
+    output_width = SequenceAt(output_size, 1)
+    scales = Concat["axis":0](1.0, 1.0, Div(output_height, input_height), Div(output_width, input_width))
+    y = Upsample["mode":mode](x, scales)
+    <T_NumAll, y, single, "T", "Output Tensor">
+};
+
+def UpsampleWithOutSize
+{
+  (string("align_corners"), transform_mode, true, "Coordinate Transformation Mode")
+  (string("nearest"), mode, true, "Resize Algotithm")
+  <T_NumAll, x, single, "T", "Input Tensor">
+  <{"seq(int64)"}, output_size, single, "S", "Output Size">
+  batch, channel, input_height, input_width = Split["axis":0, "split": 4](Shape(x))
+  output_height = SequenceAt(output_size, 0)
+  output_width = SequenceAt(output_size, 1)
+  out_size = Concat["axis":0](batch, channel, output_height, output_width)
+  y = Resize["coordinate_transformation_mode": transform_mode, "mode": mode](x, roi=ConstantOfShape(0),
+                                                                        scales=ConstantOfShape(0), sizes=out_size)
+  <T_NumAll, y, single, "T", "Output Tensor">
+ };
+
+def UpsampleWithScales
+{
+  (string("align_corners"), transform_mode, true, "Coordinate Transformation Mode")
+  (string("nearest"), mode, true, "Resize Algotithm")
+  <T_NumAll, x, single, "T1", "Input Tensor">
+  <{"tensor(int64)"}, scale_h, single, "T2", "scale of height">
+  <{"tensor(int64)"}, scale_w, single, "T2", "scale of width">
+  scale = Concat["axis":0](1, 1, scale_h, scale_w)
+  y = Resize["coordinate_transformation_mode": transform_mode, "mode": mode](x, roi=ConstantOfShape(0),
+                                                                        scales=scale)
+  <T_NumAll, y, single, "T", "Output Tensor">
+};
+
+#DimSize
+def DimSize
+{
+    <T_All, x, single, "T", "Input Tensor">
+    <{"tensor(int64)"}, dim, single, "T1", "Input Dim Tensor">
+    dim_sequence = SplitToSequence["axis":0, "keepdims":1](Shape(x))
+    dim_value = SequenceAt(dim_sequence, dim)
+    <T_NumAll, dim_value, single, "T", "Output Dim Size Tensor">
+};
+
+#ClipCast
+# This Schema fix torch data type not same as ONNX data type
+def ClipCast
+{
+    (int(TENSOR_PROTO_FLOAT), to, true, "Target Type")
+    <T_NumAll, input, single, "T", "Input Tensor">
+    <T_NumAll, min, single, "T1", "Minimum Value">
+    <T_NumAll, max, single, "T2", "Maximum Value">
+    cast_min = Cast["to": to](min)
+    cast_max = Cast["to": to](max)
+    output = Clip(input, cast_min, cast_max)
+    <T_NumAll, output, single, "T", "OUtput tensor with clipped input elements">
+};
+
+#View
+def View
+{
+   <T_NumAll, input, single, "T", "Input Tensor">
+   <{"seq(int64)"}, shape, single, "S", "Shape Value">
+   y = Reshape(input, ConcatFromSequence["axis": 0](shape))
+   <T_NumAll, y, single, "T", "Output Tensor">
+};
+
+#ViewAs
+def ViewAs
+{
+    <T_NumAll, input, single, "T", "Input Tensor">
+    <T_NumAll, other, single, "T", "Other Tensor">
+    shape = Shape(other)
+    output = Reshape(input, shape)
+    <T_NumAll, output, single, "T", "Output Tensor">
+};
+
+#TorchPadConst
+def TorchPadConst
+{
+    (graph({
+        input_tensor(index, loop_cond)
+        input_attribute()
+        default_pad = Constant["value":[0, 0]]()
+        out_tensor(loop_cond, default_pad)
+    }), pad_append_default, false, "Append Default Pad")
+
+    <T_NumAll, data, single, "T", "Input tensor">
+    <{"seq(int64)"}, pads, single, "I64", "Pad Tensor in [x1_begin, x1_end, x2_begin, x2_end ...]">
+    <T_NumAll, constant_value, single, "T", "A Scale Value to be used.">
+    rank = Rank(data)
+    orig_begin_end_pads = Reshape(ConcatFromSequence["axis": 0](pads), [-1, 2])
+    pads_count = SequenceLength(SplitToSequence["axis":0, "keepdims":0](orig_begin_end_pads))
+    pads_reverse = ReverseSequence["batch_axis": 1, "time_axis": 0](orig_begin_end_pads, ConcatFromSequence["axis": 0,
+                                                              "new_axis":1](SequenceConstruct(pads_count, pads_count)))
+
+    loop_cont = Sub(rank, pads_count)
+    default_pads_list = Loop["body": pad_append_default](loop_cont, true)
+    fill_begin_end_pads = Concat["axis": 0](default_pads_list, pads_reverse)
+    re_order_pads = Transpose["perm":[1, 0]](fill_begin_end_pads)
+    onnx_like_pads = Reshape(re_order_pads, [-1])
+    output = Pad["mode":"constant"](data, onnx_like_pads, constant_value)
+    <T_NumAll, output, single, "T", "Output Tensor">
+};
+
+#TorchTranspose
+def TorchTranspose
+{
+    (graph({
+        input_tensor(index, loop_cond, to_expand_tensor)
+        input_attribute()
+        expand_tensor = Unsqueeze["axes": [-1]](to_expand_tensor)
+        need_expand = Less(Rank(expand_tensor), 10)
+        out_tensor(need_expand, expand_tensor)
+    }), expand_dim, false, "Expand The Tensor Dims")
+    (graph({
+        input_tensor(index, loop_cond, to_shrink_tensor, orig_rank)
+        input_attribute()
+        shrink_tensor = Squeeze["axes": [-1]](to_shrink_tensor)
+        need_shrink = Greater(Rank(shrink_tensor), orig_rank)
+        out_tensor(need_shrink, shrink_tensor, orig_rank)
+    }), shrink_dim, false, "Shrink The Tensor Dims")
+    (ints([0,1,2,3,4,5,6,7,8,9]), transpose_dim0_to_10, true, "Trans dim0 to aux d10.")
+    (ints([0,1,2,3,4,5,6,7,8,9]), transpose_dim1_to_10, true, "Trans dim1 to aux d10.")
+    <T_All, data, single, "T", "Input Tensor">
+    rank = Rank(data)
+    expand_data = Loop["body": expand_dim](10, true, data)
+    trans_dim0_10 = Transpose["perm":transpose_dim0_to_10](expand_data)
+    trans_dim1_10 = Transpose["perm":transpose_dim1_to_10](trans_dim0_10)
+    transed_expand = Transpose["perm":transpose_dim0_to_10](trans_dim1_10)
+    transposed = Loop["body": shrink_dim](10, true, transed_expand, rank)
+    <T_All, transposed, single, "T", "Output Tensor">
+};
+
+
+#Log2
+def Log2
+{
+    <T_Float, input, single, "T", "Input Tensor">
+    output = Div(Log(input), Log(2))
+    <T_Float, output, single, "T", "Output Tensor">
+};
+
+#Log10
+def Log10
+{
+    <T_Float, input, single, "T", "Input Tensor">
+    output = Div(Log(input), Log(10))
+    <T_Float, output, single, "T", "Output Tensor">
+};
+
+#Rsqrt
+def Rsqrt
+{
+    <T_Float, x, single, "T", "Input Tensor">
+    y = Div(1, Sqrt(x))
+    <T_Float, y, single, "T", "Output Tensor">
+};
+
+#MaxWithIndices
+def MaxWithIndices
+{
+    (int(0), axis, true, "axis to reduce max indices.")
+    (ints([0]), axes, true, "axes to reduce max elements.")
+    (int(0), keepdim, true, "keep the reduce dim or not")
+    <T_NumAll, input, single, "T", "Input tensor">
+    reduced = ReduceMax["axes": axes, "keepdims": keepdim](input)
+    indices = ArgMax["axis": axis, "keepdims": keepdim](input)
+    <T_NumAll, reduced, single, "T", "Output Max Tensor">
+    <{"tensor(int64)"}, indices, single, "T1", "Output Indices Tensor">
+};
+
+#MinWithIndices
+def MinWithIndices
+{
+    (int(0), axis, true, "axis to reduce min indices.")
+    (ints([0]), axes, true, "axes to reduce min elements.")
+    (int(0), keepdim, true, "keep the reduce dim or not")
+    <T_NumAll, input, single, "T", "Input tensor">
+    reduced = ReduceMin["axes": axes, "keepdims": keepdim](input)
+    indices = ArgMin["axis": axis, "keepdims": keepdim](input)
+    <T_NumAll, reduced, single, "T", "Output Min Tensor">
+    <{"tensor(int64)"}, indices, single, "T1", "Output Indices Tensor">
+};
+
+# TorchExpand
+def TorchExpand
+{
+   <T_NumAll, input, single, "T", "Input Tensor">
+   <{"seq(int64)"}, shape, single, "S", "Shape Value">
+   output = Expand(input, ConcatFromSequence["axis": 0](shape))
+   <T_NumAll, output, single, "T", "Output Tensor">
+};
+
+#TorchExpandAs
+def TorchExpandAs
+{
+    <T_NumAll, input, single, "T", "Input Tensor">
+    <T_NumAll, other, single, "T", "Other Tensor">
+    shape = Shape(other)
+    output = Expand(input, shape)
+    <T_NumAll, output, single, "T", "Output Tensor">
+};
+
+#LogSigmoid
+def LogSigmoid
+{
+    <T_NumAll, input, single, "T", "Input Tensor">
+    sig = Sigmoid(input)
+    output = Log(sig)
+    <T_NumAll, output, single, "T", "Output Tensor">
+};
+
+#NotEqual
+def NotEqual
+{
+   <T_NumAll, x, single, "T", "Input Tensor">
+   <T_NumAll, y, single, "T", "Input Tensor">
+   greater = Greater(x, y)
+   less = Less(x, y)
+   output = Or(greater, less)
+   <{"tensor(bool)"}, output, single, "T1", "Output Tensor">
+};
+
+#TorchSlice
+def TorchSlice
+{
+   (int(0), start, true, "start to slice.")
+   (int(9223372036854775807), end, true, "end to slice.")
+   (int(0), dim, true, "dim to slice.")
+   (int(1), step, true, "slice step.")
+   <T_NumAll, input, single, "T", "Input Tensor">
+   starts = ConstantOfShape["value": start]([1])
+   ends = ConstantOfShape["value": end]([1])
+   axes = ConstantOfShape["value": dim]([1])
+   steps = ConstantOfShape["value": step]([1])
+   output = Slice(input, starts, ends, axes, steps)
+   <T_NumAll, output, single, "T", "Input Tensor">
+};
+
+#Repeat
+def Repeat
+{
+   <T_NumAll, input, single, "T", "Input Tensor">
+   <{"seq(int64)"}, repeats, single, "S", "Repeat Value">
+   output = Tile(input, ConcatFromSequence["axis": 0](repeats))
+   <T_NumAll, output, single, "T", "Output Tensor">
+};
+
+#TorchPrelu
+def TorchPrelu
+{
+    <T_NumAll, input, single, "T", "Input Tensor">
+    <T_NumAll, slope, single, "T", "Slope Tensor">
+    input_rank = Rank(input)
+    slope_prod = ReduceProd(Shape(slope))
+    initial_slope = ConstantOfShape["value":1](Unsqueeze["axes":[0]](input_rank))
+    slope_sequence = SplitToSequence(initial_slope)
+    final_slope_shape = ConcatFromSequence["axis":0](SequenceInsert(SequenceErase(slope_sequence, 1), slope_prod, 1))
+    slope_value = Reshape(slope, final_slope_shape)
+    output = PRelu(input, slope_value)
+    <T_NumAll, output, single, "T", "Input Tensor">
+};
+
+def Select
+{
+    (int(0), dim, true, "select axis")
+    (int([0]), axes, true, "squeeze axis")
+    <T_NumAll, data, single, "T", "Input Tensor">
+    <{"tensor(int64)"}, indices, single, "T1", "Axes Tensor">
+    output = Squeeze["axes": axes](Gather["axis": dim](data, indices))
+    <T_NumAll, output, single, "T", "Output Tensor">
+};
+
+def Rsub
+{
+   (int(1), alpha, true, "alpha")
+   <T_NumAll, x, single, "T", "Input Tensor">
+   <T_NumAll, y, single, "T", "Other Tensor">
+   <T_NumAll, alpha, single, "T", "Alpha Tensor">
+   output = Sub(y, Mul(x, alpha))
+   <T_NumAll, output, single, "T", "Output Tensor">
+};
+
+def LayerNorm
+{
+   (ints([1, 2, 3]), axes, true, "axes to apply normalization")
+   (float(0.00001), eps, true, "eps to apply normalization")
+   <T_NumAll, input, single, "T", "Input Tensor">
+   <T_NumAll, weight, single, "T", "Weight Tensor">
+   <T_NumAll, bias, single, "T", "Bias Tensor">
+   data_mean = ReduceMean["axes": axes, "keepdims": 1](input)
+   offset = Sub(input, data_mean)
+   var = ReduceMean["axes": axes, "keepdims": 1](Pow(offset, 2))
+   norm = Div(offset, Sqrt(Add(var, eps)))
+   output = Add(Mul(norm, weight), bias)
+   <T_NumAll, output, single, "T", "Output Tensor">
+};
+
+def BatchMatMul
+{
+   <T_NumAll, input, single, "T", "Input Tensor">
+   <T_NumAll, mat2, single, "T", "Weight Tensor">
+   batch1, mat1_h, mat1_w = Split["axis":0, "split":3 ](Shape(input))
+   batch2, mat2_h, mat2_w = Split["axis":0, "split":3 ](Shape(mat2))
+   m1 = Reshape(Tile(input, Concat["axis":0](1, 1, mat2_w)), Concat["axis":0](batch1, -1, mat1_w))
+   m2 = Tile(Transpose["perm": [0, 2, 1]](mat2), Concat["axis":0](1, mat1_h, 1))
+   reduced = ReduceSum["axes": [-1]](Mul(m1, m2))
+   output = Reshape(reduced, Concat["axis":0](batch1, mat1_h, mat2_w))
+   <T_NumAll, output, single, "T", "Output Tensor">
+};

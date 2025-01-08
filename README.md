@@ -1,16 +1,9 @@
 ## Clone
 
-Clone with submodules
-
 ```sh
-$ git clone --recursive https://github.com/khadas/aml_npu_sdk.git
-```
-
-update submodules
-
-```sh
-$ git submodule init
-$ git submodule update
+$ git clone https://github.com/khadas/aml_npu_sdk.git
+$ cd aml_npu_sdk
+$ git lfs pull
 ```
 
 c/c++ convert tool:

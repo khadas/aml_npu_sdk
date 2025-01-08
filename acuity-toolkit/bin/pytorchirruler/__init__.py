@@ -1,0 +1,2 @@
+from .pytorch_ir_ruler_generate import gen_pytorch_ruler
+from .pytorch_ir_ruler_generate import r_cat_templete_fun

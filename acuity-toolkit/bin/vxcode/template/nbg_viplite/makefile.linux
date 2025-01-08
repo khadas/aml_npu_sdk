@@ -1,0 +1,30 @@
+include $(AQROOT)/makefile.linux.def
+
+VIVANTE_SDK_DIR ?= $(SDK_DIR)
+
+INCLUDE += -I$(VIVANTE_SDK_DIR)/include
+
+CFLAGS += $(INCLUDE)
+
+################################################################################
+# Supply necessary libraries.
+LIBS += -L$(VIVANTE_SDK_DIR)/drivers -Wl,-rpath-link,$(VIVANTE_SDK_DIR)/drivers
+
+#############################################################################
+
+SOURCE = ${wildcard *.c}
+
+TARGET_NAME = #NETWORK_NAME_LOWER#
+
+# installation directory
+OUT_DIR ?= $(PWD)/out
+################################################################################
+
+target = $(OUT_DIR)/$(TARGET_NAME)
+$(target):
+	@mkdir -p $(OUT_DIR)
+	@$(CC) $(CFLAGS) -g -o $@ $(SOURCE) $(LIBS) -l VIPlite
+
+.PHONY: clean
+clean:
+	@rm -rf $(OUT_DIR)

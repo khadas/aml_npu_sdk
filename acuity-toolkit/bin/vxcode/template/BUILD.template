@@ -1,0 +1,18 @@
+# AUTO GENERATED FILE, BUILD AND RUN IN OVXLIB
+
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "srcs",
+    srcs =#SOURCE_FILES#,
+)
+
+cc_binary(
+    name = "inference",
+    srcs = [":srcs"] + ["//:ovxlib"],
+    deps = [
+        "//third-party/jpeg-9b:libjpeg",
+        "//:ovxlib",
+        "@VIV_SDK//:VIV_SDK_LIB",
+    ],
+)

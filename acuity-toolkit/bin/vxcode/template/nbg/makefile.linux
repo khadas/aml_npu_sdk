@@ -1,0 +1,66 @@
+CC=$(CROSS_COMPILE)gcc
+CXX=$(CROSS_COMPILE)g++
+DEBUG=0
+INCLUDES=-I. -I$(VIVANTE_SDK_DIR)/include/ \
+ -I$(VIVANTE_SDK_DIR)/include/CL \
+ -I$(VIVANTE_SDK_DIR)/include/VX \
+ -I$(VIVANTE_SDK_DIR)/include/ovxlib \
+ -I$(VIVANTE_SDK_DIR)/include/jpeg
+CFLAGS=-Wall -std=c++0x $(INCLUDES) -D__linux__ -DLINUX
+ifeq (1,$(DEBUG))
+CFLAGS+=-g
+LFLAGS+=-g
+else
+CFLAGS+=-O3
+LFLAGS+=-O3
+endif
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib/vsim \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib/x64_linux \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib/x64_linux/vsim \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy
+LIBS+= -L$(VIVANTE_SDK_DIR)/lib/x64_linux/vsim \
+ -lOpenVX -lOpenVXU -lCLC -lVSC -lGAL -lovxlib -lEmulator -lvdtproxy
+LIBS+= -L$(VIVANTE_SDK_DIR)/../common/lib/ \
+ -lvdtproxy
+File = $(VIVANTE_SDK_DIR)/lib/libjpeg.a
+File2 = $(VIVANTE_SDK_DIR)/lib/x64_linux/libjpeg.a
+File3 = $(VIVANTE_SDK_DIR)/../common/lib/libjpeg.a
+ifeq ($(File),$(wildcard $(File)))
+LIBS+= $(File)
+else ifeq ($(File2),$(wildcard $(File2)))
+LIBS+= $(File2)
+else
+LIBS+= $(File3)
+endif
+SRCS=${wildcard *.c}
+SRCS+=${wildcard *.cpp}
+BIN=gen_nbg
+OBJS=$(addsuffix .o, $(basename $(SRCS)))
+
+.SUFFIXES: .cpp .c
+
+.cpp.o:
+	$(CC) $(CFLAGS) -c $<
+
+.cpp:
+	$(CXX) $(CFLAGS) $< -o $@ -lm
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+
+.c:
+	$(CC) $(CFLAGS) $< -o $@ -lm
+
+all: $(BIN)
+
+$(BIN): $(OBJS)
+	$(CC) $(CFLAGS) $(LFLAGS) $(EXTRALFLAGS) $(OBJS) $(LIBS) -o $@
+
+clean:
+	rm -rf *.o
+	rm -rf $(BIN)
+	rm -rf *~

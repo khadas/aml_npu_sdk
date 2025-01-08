@@ -1,0 +1,14 @@
+[device]
+target = VIP9000NANODI_PID0XBE
+pid = 0XBE
+optimization = True
+core = 8
+mad_per_core = 64
+input_buffer_depth = 12
+float16_support = False
+dynamic_fixed_point-8_support = True
+dynamic_fixed_point-16_support = True
+asymmetric_quantized-u8_support = True
+extSRAMSizes = 0x3E000
+evis = 2
+
