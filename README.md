@@ -6,6 +6,8 @@ $ cd aml_npu_sdk
 $ git lfs pull
 ```
 
+**NOTE: If you can't clone the repo, you can download the archive package [here](https://dl.khadas.com/products/vim3/tools/npu-sdk/).**
+
 c/c++ convert tool:
 
 ```
